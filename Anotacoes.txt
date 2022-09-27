@@ -1,0 +1,6 @@
+File System Routing -> roteamento baseado em arquivos físicos
+
+No next, tudo são componentes, até mesmo o html da página
+
+Maioria das bibliotecas de css o aplicam durante o "runtime", no navegador do usuário
+
