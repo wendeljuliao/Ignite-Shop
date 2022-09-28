@@ -3,8 +3,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/future/image";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Stripe from "stripe";
+import { ItemsContext } from "../../contexts/ItemsContext";
 import { stripe } from "../../lib/stripe";
 import {
   ImageContainer,
@@ -27,7 +28,9 @@ export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false);
 
-  async function handleBuyProduct() {
+  const { addItemByCart } = useContext(ItemsContext);
+
+  /* async function handleBuyProduct() {
     try {
       setIsCreatingCheckoutSession(true);
       // utiliza a mesma base de endereço do front-end
@@ -44,6 +47,15 @@ export default function Product({ product }: ProductProps) {
       // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
       alert("Falha ao redirecionar ao checkout!");
     }
+  } */
+
+  function handleAddProductByCart() {
+    addItemByCart({
+      id: product.id,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      price: product.price,
+    });
   }
 
   const { isFallback } = useRouter();
@@ -70,7 +82,7 @@ export default function Product({ product }: ProductProps) {
 
           <button
             disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
+            onClick={handleAddProductByCart}
           >
             Comprar agora
           </button>
