@@ -24,7 +24,10 @@ export function ItemsProvider({ children }: IItemsProviderProps) {
   const [items, setItems] = useState<IItemProps[]>([]);
 
   function addItemByCart(newItem: IItemProps) {
-    setItems((state) => [...state, newItem]);
+    const itemHasExist = items.find((item) => item.id === newItem.id);
+    if (!itemHasExist) {
+      setItems((state) => [...state, newItem]);
+    }
   }
 
   function removeItemByCart(id: string) {

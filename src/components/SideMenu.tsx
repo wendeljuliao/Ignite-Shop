@@ -1,5 +1,7 @@
 import Image from "next/future/image";
 import { X } from "phosphor-react";
+import { useContext } from "react";
+import { ItemsContext } from "../contexts/ItemsContext";
 import { SideMenu } from "../styles/pages/app";
 
 interface ISideMenuProps {
@@ -7,6 +9,20 @@ interface ISideMenuProps {
 }
 
 export function SideMenuComponent({ setShowSideMenu }: ISideMenuProps) {
+  const { items, quantityItems, removeItemByCart } = useContext(ItemsContext);
+
+  const itemsFormattedPrice = items.map((item) => {
+    return item.price.replace("R$", "").replace(",", ".");
+  });
+
+  const sumPriceItems = itemsFormattedPrice.reduce(
+    (sum, price) => sum + parseFloat(price),
+    0
+  );
+
+  function handleRemoveByCart(id: string) {
+    removeItemByCart(id);
+  }
   return (
     <SideMenu>
       <header>
@@ -15,27 +31,41 @@ export function SideMenuComponent({ setShowSideMenu }: ISideMenuProps) {
       <h3>Sacola de compras</h3>
 
       <div className="content-products">
-        <div className="product">
-          <div className="wrapper-image">
-            <Image src={""} width={94.79} height={94.79} alt="" />
-          </div>
-          <div className="info-product">
-            <p>Camiseta Beyond the Limits</p>
-            <strong>R$ 79,90</strong>
+        {items.map((item) => {
+          return (
+            <div key={item.id} className="product">
+              <div className="wrapper-image">
+                <Image
+                  src={item.imageUrl}
+                  width={94.79}
+                  height={94.79}
+                  alt=""
+                />
+              </div>
+              <div className="info-product">
+                <p>{item.name}</p>
+                <strong>{item.price}</strong>
 
-            <a>Remover</a>
-          </div>
-        </div>
+                <a onClick={() => handleRemoveByCart(item.id)}>Remover</a>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="content-infos-buy">
         <div>
           <p>Quantidade</p>
-          <span>3 itens</span>
+          <span>{quantityItems} itens</span>
         </div>
         <div>
           <span>Valor total</span>
-          <strong>R$ 270,00</strong>
+          <strong>
+            {new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(sumPriceItems)}
+          </strong>
         </div>
 
         <button>Finalizar compra</button>
