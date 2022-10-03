@@ -1,6 +1,7 @@
+import axios from "axios";
 import Image from "next/future/image";
 import { X } from "phosphor-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ItemsContext } from "../contexts/ItemsContext";
 import { SideMenu } from "../styles/pages/app";
 
@@ -9,6 +10,8 @@ interface ISideMenuProps {
 }
 
 export function SideMenuComponent({ setShowSideMenu }: ISideMenuProps) {
+  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
+    useState(false);
   const { items, quantityItems, removeItemByCart } = useContext(ItemsContext);
 
   const itemsFormattedPrice = items.map((item) => {
@@ -23,6 +26,26 @@ export function SideMenuComponent({ setShowSideMenu }: ISideMenuProps) {
   function handleRemoveByCart(id: string) {
     removeItemByCart(id);
   }
+
+  async function handleBuyProducts() {
+    try {
+      setIsCreatingCheckoutSession(true);
+      // utiliza a mesma base de endereço do front-end
+      const response = await axios.post("/api/checkoutItems", {
+        items: items,
+      });
+
+      const { checkoutUrl } = response.data;
+
+      // Redirecionar para rota externa
+      window.location.href = checkoutUrl;
+    } catch (err) {
+      setIsCreatingCheckoutSession(false);
+      // Conectar com uma ferramenta de observabilidade (Datadog / Sentry)
+      alert("Falha ao redirecionar ao checkout!");
+    }
+  }
+
   return (
     <SideMenu>
       <header>
@@ -68,7 +91,7 @@ export function SideMenuComponent({ setShowSideMenu }: ISideMenuProps) {
           </strong>
         </div>
 
-        <button>Finalizar compra</button>
+        <button disabled={isCreatingCheckoutSession} onClick={handleBuyProducts}>Finalizar compra</button>
       </div>
     </SideMenu>
   );

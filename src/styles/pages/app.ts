@@ -1,9 +1,5 @@
 import { styled } from "..";
 
-interface HeaderProps {
-  enabledBag: boolean;
-};
-
 export const Container = styled('div', {
   display: 'flex',
   flexDirection: 'column',
@@ -19,7 +15,6 @@ export const Header = styled('header', {
   maxWidth: 1180,
   margin: '0 auto',
 
-  justifyContent: 'space-between',
   alignItems: 'center',
 
   img: {
@@ -36,6 +31,15 @@ export const Header = styled('header', {
   },
 
   variants: {
+    pathnameIsSuccess: {
+      true: {
+        justifyContent: 'center'
+      },
+      false: {
+        justifyContent: 'space-between'
+      },
+
+    },
     enabledBag: {
       false: {
         div: {
@@ -74,7 +78,7 @@ export const Header = styled('header', {
       }
     }
   }
-  
+
 });
 
 export const SideMenu = styled('aside', {
@@ -165,7 +169,7 @@ export const SideMenu = styled('aside', {
       fontSize: '1rem',
       lineHeight: 1.6,
       color: '$green500',
-      
+
       cursor: 'pointer',
 
       '&:hover': {
@@ -234,10 +238,14 @@ export const SideMenu = styled('aside', {
 
       cursor: 'pointer',
 
-      '&:hover': {
+      '&:disabled': {
+        opacity: 0.6,
+      },
+
+      '&:not(:disabled):hover': {
         backgroundColor: '$green300',
       }
     }
   }
-  
+
 });

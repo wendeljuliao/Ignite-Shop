@@ -5,6 +5,7 @@ interface IItemProps {
   name: string;
   imageUrl: string;
   price: string;
+  defaultPriceId: string;
 }
 
 interface IItemsContextType {

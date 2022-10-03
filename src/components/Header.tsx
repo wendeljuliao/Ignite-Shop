@@ -6,6 +6,7 @@ import { ItemsContext } from "../contexts/ItemsContext";
 
 import logoImg from "../assets/logo.svg";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface IHeaderProps {
   setShowSideMenu: (condicao: boolean) => void;
@@ -20,17 +21,19 @@ export function HeaderComponent({ setShowSideMenu }: IHeaderProps) {
     }
   }
 
+  const pathnameIsSuccess = useRouter().pathname.includes("/success");
+
   const enabledBag = quantityItems > 0;
   return (
-    <Header enabledBag={enabledBag}>
+    <Header enabledBag={enabledBag} pathnameIsSuccess={pathnameIsSuccess}>
       <Link href="/" prefetch={false}>
         <Image src={logoImg} alt="" />
       </Link>
 
-      <div onClick={handleShowSideMenu}>
+      {!pathnameIsSuccess && <div onClick={handleShowSideMenu}>
         {enabledBag && <div>{quantityItems}</div>}
         <Handbag size={24} weight="bold" />
-      </div>
+      </div>}
     </Header>
   );
 }

@@ -55,6 +55,7 @@ export default function Product({ product }: ProductProps) {
       name: product.name,
       imageUrl: product.imageUrl,
       price: product.price,
+      defaultPriceId: product.defaultPriceId
     });
   }
 
